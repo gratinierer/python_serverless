@@ -24,7 +24,7 @@ def payload_print(req: Request) -> str:
         for key in req.args.keys():
             ret += '"' + key + '": "' + req.args[key] + '", '
 
-        return ret[:-2] + "}\n" if len(ret) > 2 else "{}"
+        return ret[:-2] + "}\n" if len(ret) > 2 else "{BAMGET}"
 
 
 # pretty print the request to stdout instantaneously
