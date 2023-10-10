@@ -1,7 +1,9 @@
 from parliament import Context
 from flask import Request
 import json
-
+import csv
+import pandas as pd
+from sqlalchemy import create_engine, types
 
 # parse request body, json data or URL query parameters
 def payload_print(req: Request) -> str:
@@ -29,18 +31,11 @@ def payload_print(req: Request) -> str:
 
 # pretty print the request to stdout instantaneously
 def pretty_print(req: Request) -> str:
-    ret = str(req.method) + ' ' + str(req.url) + ' ' + str(req.host) + '\n'
-    for (header, values) in req.headers:
-        ret += "  " + str(header) + ": " + values + '\n'
+    ret = str(req.data)
+    engine = create_engine('mysql://root:testur@mariadb/testdb') # enter your password and database names here
 
-    if req.method == "POST":
-        ret += "Request body:\n"
-        ret += "  " + payload_print(req) + '\n'
-
-    elif req.method == "GET":
-        ret += "URL Query String:\n"
-        ret += "  " + payload_print(req) + '\n'
-
+    df = pd.read_csv(ret,sep=',',quotechar='\'',encoding='utf8') # Replace Excel_file_name with your excel sheet name
+    df.to_sql('Table_name',con=engine,index=False,if_exists='append') # Replace Table_name with your sql table name
     return ret
 
  
@@ -57,7 +52,7 @@ def main(context: Context):
     if 'request' in context.keys():
         ret = pretty_print(context.request)
         print(ret, flush=True)
-        return payload_print(context.request), 200
+        return "processed", 200
     else:
         print("Empty request", flush=True)
-        return "{BAM}", 200
+        return "{GET??}", 200
