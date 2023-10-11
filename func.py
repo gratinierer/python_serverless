@@ -1,7 +1,6 @@
 from parliament import Context
 from flask import Request
 import json
-import csv
 import pandas as pd
 from sqlalchemy import create_engine, types
 
@@ -34,8 +33,8 @@ def pretty_print(req: Request) -> str:
     ret = str(req.data)
     engine = create_engine('mysql://root:testur@mariadb/testdb') # enter your password and database names here
 
-    df = pd.read_csv(ret,sep=',',quotechar='\'',encoding='utf8') # Replace Excel_file_name with your excel sheet name
-    df.to_sql('Table_name',con=engine,index=False,if_exists='append') # Replace Table_name with your sql table name
+    df = pd.read_csv(ret, sep=',', quotechar='\'', encoding='utf8') # Replace Excel_file_name with your excel sheet name
+    df.to_sql('Table_name', con=engine, index=False, if_exists='append') # Replace Table_name with your sql table name
     return ret
 
  
